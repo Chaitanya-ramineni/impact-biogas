@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Capture</title>
+</head>
+<body>
+    <h1>Image Capture</h1>
+    <video id="cameraFeed" autoplay></video>
+    <button id="captureButton">Capture Image</button>
+    <canvas id="capturedImage"></canvas>
+    <p id="captureMessage" style="display: none;">Image captured. You can now close this window.</p>
+
+    <script>
+        const cameraFeed = document.getElementById('cameraFeed');
+        const captureButton = document.getElementById('captureButton');
+        const capturedImage = document.getElementById('capturedImage');
+        const captureMessage = document.getElementById('captureMessage');
+        const context = capturedImage.getContext('2d');
+
+        // Initialize the camera feed
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                cameraFeed.srcObject = stream;
+            })
+            .catch(function (error) {
+                console.error('Error accessing camera:', error);
+            });
+
+        // Capture image and show message
+        captureButton.addEventListener('click', function () {
+            context.drawImage(cameraFeed, 0, 0, capturedImage.width, capturedImage.height);
+            captureMessage.style.display = 'block';
+        });
+    </script>
+</body>
+<body>
+    <h1>Geolocation Tracking</h1>
+    <p>Click the button to get your current location:</p>
+    <button id="getLocationButton">Get My Location</button>
+    <p id="locationResult"></p>
+
+    <script>
+        const getLocationButton = document.getElementById('getLocationButton');
+        const locationResult = document.getElementById('locationResult');
+
+        getLocationButton.addEventListener('click', function () {
+            getLocation();
+        });
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        const accuracy = position.coords.accuracy;
+
+                        locationResult.innerHTML = `
+                            Latitude: ${latitude}<br>
+                            Longitude: ${longitude}<br>
+                            Accuracy: ${accuracy} meters
+                        `;
+                    },
+                    function (error) {
+                        locationResult.textContent = `Error getting location: ${error.message}`;
+                    }
+                );
+            } else {
+                locationResult.textContent = 'Geolocation is not supported in this browser.';
+            }
+        }
+    </script>
+</body>
+</html>
