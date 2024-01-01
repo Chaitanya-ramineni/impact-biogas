@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Capture</title>
+</head>
+<body>
+    <h1>Image Capture</h1>
+    <video id="cameraFeed" autoplay></video>
+    <button id="captureButton">Capture Image</button>
+    <canvas id="capturedImage"></canvas>
+
+    <script>
+        const cameraFeed = document.getElementById('cameraFeed');
+        const captureButton = document.getElementById('captureButton');
+        const capturedImage = document.getElementById('capturedImage');
+        const context = capturedImage.getContext('2d');
+
+        // Initialize the camera feed
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                cameraFeed.srcObject = stream;
+            })
+            .catch(function (error) {
+                console.error('Error accessing camera:', error);
+            });
+
+        // Capture image
+        captureButton.addEventListener('click', function () {
+            context.drawImage(cameraFeed, 0, 0, capturedImage.width, capturedImage.height);
+        });
+    </script>
+</body>
+</html>
